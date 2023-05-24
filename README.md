@@ -1,3 +1,3 @@
 # AIP302
 
-Vietnamese lant dataset
+Vietnamese edible plant dataset
