@@ -21,9 +21,24 @@ ITEMS = {'rau muống' : 'Water morning glory leaves',
 
 
 
-
+from icrawler.builtin import GoogleImageCrawler, BaiduImageCrawler, FlickrImageCrawler, BingImageCrawler, GreedyImageCrawler
 
 driver = webdriver.Chrome('chromedriver.exe')
+
+def crawl_icraw(keyword, num, dir, platform='google'):
+    if platform == 'google':
+        crawler = GoogleImageCrawler(storage={'root_dir': dir})
+    elif platform == 'bing':
+        crawler = BingImageCrawler(storage={'root_dir': dir})
+    elif platform == 'baidu':
+        crawler = BaiduImageCrawler(storage={'root_dir': dir})
+    elif platform == 'flickr':
+        crawler = FlickrImageCrawler(storage={'root_dir': dir})
+    elif platform == 'greedy':
+        crawler = GreedyImageCrawler(storage={'root_dir': dir})
+    else:
+        print('fail platform')
+    crawler.crawl(keyword=keyword, max_num=num)
 
 
 def crawl_plant_net(name):
