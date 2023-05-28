@@ -1,49 +1,26 @@
-import os
-import shutil
-import numpy as np
+from module import crawl_icraw, merge_folder, clean_img, crawl_plant_net, download_img, rename_img_folder
 
 
-# def split_train_val(path, dest, class_name, val_ratio):
-#     files = os.listdir(path)
-#     size = len(files)
-#
-#     val_len = int(size * val_ratio)
-#     arr_file = np.array(files)
-#     np.random.shuffle(arr_file)
-#
-#     val_lst = arr_file[:val_len]
-#     train_lst = arr_file[val_len:]
-#
-#     dest_val = os.path.join(dest, f'val/{class_name}')
-#     dest_train = os.path.join(dest, f'train/{class_name}')
-#     os.makedirs(dest_val, exist_ok=True)
-#     os.makedirs(dest_train, exist_ok=True)
-#
-#     for img in val_lst:
-#         shutil.copy(os.path.join(path, img), dest_val)
-#
-#     for img in train_lst:
-#         shutil.copy(os.path.join(path, img), dest_train)
-#
-#
-# for i in ['amaranth', 'morning-glory', 'spinacia-oleracea']:
-#     split_train_val('data/data/' + i, 'dataset', i, 0.10)
+#Icrawler module's Code sample
+key = 'dog'
+search_engine = ['google', 'baidu']
+num_img = 50
+dest_folder = 'test/dog'
 
-from icrawler.builtin import GoogleImageCrawler, BaiduImageCrawler, FlickrImageCrawler, BingImageCrawler, GreedyImageCrawler
+for engine in search_engine:
+    crawl_icraw(key, num_img, f'{dest_folder}/{engine}', platform=engine)
 
-def crawl_icraw(keyword, num, dir, platform='google'):
-    if platform == 'google':
-        crawler = GoogleImageCrawler(storage={'root_dir': dir})
-    elif platform == 'bing':
-        crawler = BingImageCrawler(storage={'root_dir': dir})
-    elif platform == 'baidu':
-        crawler = BaiduImageCrawler(storage={'root_dir': dir})
-    elif platform == 'flickr':
-        crawler = FlickrImageCrawler(storage={'root_dir': dir})
-    elif platform == 'greedy':
-        crawler = GreedyImageCrawler(storage={'root_dir': dir})
-    else:
-        print('fail platform')
-    crawler.crawl(keyword=keyword, max_num=num)
+merge_folder(dest_folder, f'{dest_folder}/merge')
+clean_img(f'{dest_folder}/merge')
 
-crawl_icraw('cat', 50, 'test/cat', 'baidu')
+
+
+
+#Plant net crawler code sample
+plant_name = 'Sauropus androgynus (L.) Merr.'
+dest_folder = 'test/plant/Sauropus androgynus'
+
+img_urls = crawl_plant_net(plant_name)
+download_img(img_urls, dest_folder)
+rename_img_folder(dest_folder)
+clean_img(dest_folder)
