@@ -12,13 +12,6 @@ import os
 import io
 import urllib
 
-ITEMS = {'rau muống' : 'Water morning glory leaves',
-         'rau dền' : 'Amaranth leaves',
-         'rau ngót' : 'Katuk leaves',
-         'rau mồng tơi' : 'Malabar spinach leaves',
-         'rau cải xoong' : 'Watercress leaves',
-         'rau chân vịt' : 'Spinach leaves'}
-
 
 #Crawl image from search image engines (Bing, Google, Baidu)
 def crawl_icraw(keyword, num, dir, platform='google'):
@@ -59,7 +52,7 @@ def crawl_plant_net(name):
 
         return url_list
     driver = webdriver.Chrome('chromedriver.exe')
-    plantnet_url = f'https://identify.plantnet.org/prosea/species/{name}/data'
+    plantnet_url = f'https://identify.plantnet.org/the-plant-list/species/{name}/data'
 
     driver.get(plantnet_url)
     time.sleep(1)
@@ -170,3 +163,15 @@ def split_train_val(path, dest, class_name, val_ratio):
 
     for img in train_lst:
         shutil.copy(os.path.join(path, img), dest_train)
+
+def merge_plantnet_imagesearch(plant_folder, search_folder, dest_folder, ratio):
+    plant_img = os.listdir(plant_folder)
+    search_img = os.listdir(search_folder)
+
+    plant_len = len(plant_img)
+    search_len = plant_len * ratio
+
+    for id in range(search_len):
+        if id <= plant_len:
+            shutil.copy(os.path.join(plant_folder, plant_img[id]), dest_folder)
+        shutil.copy(os.path.join(search_folder, search_img[id]), dest_folder)
